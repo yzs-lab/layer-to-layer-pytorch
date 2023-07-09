@@ -123,6 +123,14 @@ l2l_model = Layer2Layer(
 
 And then train the same way 😉
 
+## Develop
+
+```bash
+# curl -sSL https://install.python-poetry.org | python3 -
+# poetry install
+python setup.py develop
+```
+
 ## Installation
 
 ```bash
