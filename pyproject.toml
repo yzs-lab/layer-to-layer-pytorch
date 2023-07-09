@@ -32,10 +32,10 @@ classifiers = [  # Update me
 "layer-to-layer-pytorch" = "layer_to_layer_pytorch.__main__:app"
 
 [tool.poetry.dependencies]
-python = "^3.7"
+python = ">=3.8.0,<4.0"
 importlib_metadata = {version = ">=1.6,<4.0", python = "<3.8"}
 typer = {extras = ["all"], version = "^0.3.2"}
-torch = "^1.6.0"
+torch = "2.0.1"
 tqdm = "^4.50.0"
 numpy = "^1.19.1"
 
