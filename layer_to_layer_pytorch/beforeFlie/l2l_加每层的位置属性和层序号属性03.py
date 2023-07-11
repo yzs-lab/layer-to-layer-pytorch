@@ -118,8 +118,9 @@ class Layer2Layer:
             
             key="key"
             value="value"
-            setattr(layer, key, value) # 给layer添加一个成员变量 key  ，成员变量的值为 
-            assert value == getattr(layer, key) # 获得这个成员变量key的值value
+            setattr(layer, key, value)
+            
+            assert value == getattr(layer, key)
             
             # host-to-device weight   (layer)
             # 1.1 主机 到 GPU: 将层移动到指定的 GPU 设备。

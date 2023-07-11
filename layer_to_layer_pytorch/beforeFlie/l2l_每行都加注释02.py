@@ -61,13 +61,9 @@ class Layer2Layer:
         self._num_layers: int = len(layers)
         self._activations: List[torch.Tensor] = []
         self._grads: List[torch.Tensor] = []
-    
-    # @property: 这是一个装饰器，用于定义一个属性的 getter 方法。
+
     @property
-    # 这是一个方法 num_layers，用于获取模型的层数
     def num_layers(self) -> int:
-        #  返回属性 _num_layers 的值。属性 _num_layers 是在类的构造函数中初始化的，表示模型的层数。
-        # 以一个下划线 _ 开头的变量或属性通常被视为内部使用或私有的。这是一种约定，用于表示这些变量或属性仅供类内部使用，不应该在类外部直接访问。
         return self._num_layers
 
     @property
@@ -97,16 +93,10 @@ class Layer2Layer:
         # print("进来啦")
         # 检查是否使用混合精度
         if self.mixed_precision:
-            # 如果使用混合精度，将输入数据转换为半精度（FP16）并添加到激活值列表中。
             self._activations.append(batch.half())
         else:
-            # 如果不使用混合精度，将输入数据添加到激活值列表中。
             self._activations.append(batch)
-            
-        # 使用 enumerator 函数遍历模型的各个层。
-        # enumerator 函数根据 verbose 参数的值选择使用 enumerate 函数或者 tenumerate 函数来进行遍历。
-        # 在这里，我们使用 tenumerate 函数，它是 tqdm.contrib.tenumerate 的别名，用于在遍历过程中显示进度条和其他详细信息。
-        # idx 是当前层的索引，layer 是当前层的对象。
+
         for idx, layer in enumerator(
             self._get_layers(),
             verbose=self.verbose,
@@ -114,17 +104,10 @@ class Layer2Layer:
             total=self.num_layers,
             leave=False,
         ):
-            print(f"forward idx={idx} num_layers={self.num_layers}")
-            
-            key="key"
-            value="value"
-            setattr(layer, key, value) # 给layer添加一个成员变量 key  ，成员变量的值为 
-            assert value == getattr(layer, key) # 获得这个成员变量key的值value
-            
+            print(f"forward idx={idx}")
             # host-to-device weight   (layer)
-            # 1.1 主机 到 GPU: 将层移动到指定的 GPU 设备。
+            # 1.1 主机 到 GPU
             layer.to(self.gpu_device)
-            print(f"layer={layer}")
             input: torch.Tensor = self._activations[idx]
             microbatch_size = self._get_microbatch_size(input)
 
@@ -292,12 +275,8 @@ class Layer2Layer:
     def _reset_activations(self):
         self._activations = []
         self._grads = []
-        
-    #  这是一个类内部的私有方法 _get_layers，用于获取模型的层。
+
     def _get_layers(self) -> nn.ModuleList:
-        # 使用 getattr 函数获取模型对象 self.model 的属性 self.layers_attr 对应的值。
-        # self.layers_attr 是在类的构造函数中传入的参数，表示模型对象中包含层的属性的名称。
-        # 通过调用 _get_layers 方法，我们可以获取到模型中的层对象，以便后续的遍历和计算。
         return getattr(self.model, self.layers_attr)
 
     def _model_grad_to_master(self):
